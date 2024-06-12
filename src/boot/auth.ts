@@ -4,7 +4,7 @@ import {useAuthStore} from 'stores/auth.store'
 export default boot(({ router }) => {
   router.beforeEach((to,from,next)=>{
     const authStore = useAuthStore()
-    if(to.meta.requiredsAuth && !authStore.isAuthenticated()){
+    if(to.meta.requiredAuth && !authStore.isAuthenticated()){
       next('/login')
     }
     next()

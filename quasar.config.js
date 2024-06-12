@@ -23,6 +23,8 @@ module.exports = configure(function (/* ctx */) {
     boot: [
       'i18n',
       'axios',
+      'auth',
+      'pinia'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

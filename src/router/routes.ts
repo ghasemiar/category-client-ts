@@ -11,12 +11,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'add-post',
         component: () => import('pages/Profile/AddPost.vue'),
-        meta: { requiredsAuth: true },
+        meta: { requiredAuth: true },
       },
       {
         path: 'posts',
         component: () => import('pages/Profile/Posts.vue'),
-        meta: { requiredsAuth: true },
+        meta: { requiredAuth: true },
       },
     ],
   },
