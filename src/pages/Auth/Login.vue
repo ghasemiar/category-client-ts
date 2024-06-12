@@ -21,14 +21,13 @@
 </template>
 
 <script>
-import { useAuthStore } from '../Store/Store.Auth';
-import { ref } from 'vue';
+import { useAuthStore } from 'stores/auth.store';
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 export default {
   setup() {
-    const router = useRouter()
+    const router = useRouter();
     const authStore = useAuthStore();
 
     const schema = yup.object({
@@ -43,11 +42,11 @@ export default {
     const { value: username } = useField('username');
     const { value: password } = useField('password');
 
-    const onSubmit = handleSubmit(async values => {
-      await authStore.login(values)
-      console.log(authStore.isAuthenticated())
+    const onSubmit = handleSubmit(async (values) => {
+      await authStore.login(values);
+      console.log(authStore.isAuthenticated());
       if (authStore.isAuthenticated()) {
-        await router.push("/add-post")
+        await router.push('/add-post');
       }
     });
 

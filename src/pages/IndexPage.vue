@@ -1,5 +1,5 @@
 <template>
-  <q-page class="tw-mx-5">
+  <q-page class="tw-mx-6">
     <div class=""><q-input v-model="search" label="Search here" /></div>
     <div
       class="tw-grid tw-grid-cols-3 tw-gap-4 tw-justify-items-center tw-mt-5"
@@ -36,14 +36,14 @@ const data = ref();
 const search = ref();
 const sortOptions = ['year:desc', 'year:asc', 'price:desc', 'price:asc'];
 const sortBy = ref();
-
+const cat = inject('categories', null);
 const getAllProduct = async () => {
   await axios
     .get('http://localhost:3000/api/product', {
       params: {
         q: search.value,
-        category: inject('category', null),
-        brand: inject('brand', null),
+        category: cat,
+        // brand: inject('brand', null),
         sort: sortBy.value,
       },
     })

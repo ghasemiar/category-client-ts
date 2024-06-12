@@ -26,10 +26,10 @@
         error-message="Please enter a valid password"
         :error="errors.password"
       />
-      {{username}}
-      {{password}}
-      {{name}},
-      {{email}}
+      {{ username }}
+      {{ password }}
+      {{ name }},
+      {{ email }}
       <q-btn type="submit" label="Login" />
     </q-form>
     <RouterLink to="register">do not have any account</RouterLink>
@@ -37,8 +37,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../Store/Store.Auth';
-import { ref } from 'vue';
+import { useAuthStore } from 'stores/auth.store';
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
 
@@ -53,19 +52,19 @@ export default {
       password: yup.string().required('Password is required'),
     });
 
-    const {handleSubmit, errors} = useForm({
+    const { handleSubmit, errors } = useForm({
       validationSchema: schema,
     });
 
-    const {value: username} = useField('username');
-    const {value: name} = useField('name');
-    const {value: email} = useField('email');
-    const {value: password} = useField('password');
+    const { value: username } = useField('username');
+    const { value: name } = useField('name');
+    const { value: email } = useField('email');
+    const { value: password } = useField('password');
 
-    const onSubmit = handleSubmit(values => {
-      authStore.register(values)
+    const onSubmit = handleSubmit((values) => {
+      authStore.register(values);
       if (authStore.isAuthenticated()) {
-        alert("hi")
+        alert('hi');
       }
     });
 
@@ -75,7 +74,7 @@ export default {
       name,
       password,
       errors,
-      onSubmit
+      onSubmit,
     };
   },
 };

@@ -72,7 +72,7 @@ module.exports = {
     'prefer-promise-reject-errors': 'off',
 
     'quotes':'off',
-
+    'vue/multi-word-component-names': 0,
     // this rule, if on, would require explicit return type on the `render` function
     '@typescript-eslint/explicit-function-return-type': 'off',
 
