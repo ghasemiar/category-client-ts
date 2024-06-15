@@ -1,69 +1,95 @@
 <template>
   <q-page class="tw-mx-6">
-    <div class=""><q-input v-model="search" label="Search here" /></div>
-    <div
-      class="tw-grid tw-grid-cols-3 tw-gap-4 tw-justify-items-center tw-mt-5"
-    >
-      <q-select
-        filled
-        v-model="sortBy"
-        :options="sortOptions"
-        label="Brands"
-        class="tw-w-[70%]"
-      />
-    {{brand}}
-    </div>
-    <div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-mt-5">
-      <q-card v-for="(item, index) in data" :key="index" class="my-card">
-        <img :src="'http://localhost:3000/storage/' + item?.document?.image" />
+    <ais-instant-search index-name="Product" :search-client="searchClient">
+      <ais-search-box placeholder="نام آگهی را جست و جو کنید">
+        <template #submit-icon>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 18 18"
+            width="16"
+            height="16"
+          >
+            <g
+              fill="none"
+              fill-rule="evenodd"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.67"
+              transform="translate(1 1)"
+            >
+              <circle cx="7.11" cy="7.11" r="7.11" />
+              <path d="M16 16l-3.87-3.87" />
+            </g>
+          </svg>
+        </template>
+      </ais-search-box>
+      <div class="tw-flex tw-flex-row tw-gap-5">
+        <div class="tw-basis-1/4 tw-shadow-lg tw-rounded-lg tw-p-5">
+          <ais-hierarchical-menu
+            :attributes="[
+              'categories.lvl0',
+              'categories.lvl1',
+              'categories.lvl2',
+              'categories.lvl3',
+            ]"
+          />
+          <ais-refinement-list
+            attribute="brand"
+            searchable
+            searchable-placeholder="Search for brands…"
+          />
+        </div>
+        <div class="tw-basis-3/4">
+          <ais-hits>
+            <template v-slot="{ items }">
+              <div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-mt-5">
+                <q-card
+                  v-for="(item, index) in items"
+                  :key="index"
+                  class="my-card"
+                >
+                  <img :src="'http://localhost:3001/storage/' + item.image" />
 
-        <q-card-section>
-          <div class="text-h6">{{ item?.document?.name }}</div>
-        </q-card-section>
+                  <q-card-section>
+                    <div class="text-h6">{{ item.name }}</div>
+                  </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          {{ item?.document?.description }}
-        </q-card-section>
-      </q-card>
-    </div>
+                  <q-card-section class="q-pt-none">
+                    {{ item.description }}
+                  </q-card-section>
+                </q-card>
+              </div>
+            </template>
+          </ais-hits>
+        </div>
+      </div>
+    </ais-instant-search>
   </q-page>
 </template>
 
 <script setup>
-import axios from 'axios';
-import { inject, watch } from 'vue';
-import { ref } from 'vue';
-const data = ref();
-const search = ref();
-const sortOptions = ['year:desc', 'year:asc', 'price:desc', 'price:asc'];
-const sortBy = ref();
-const cat = inject('category', null);
-const price = inject('price', null);
-const brand = inject('brand', null)
-const getAllProduct = async () => {
-  await axios
-    .get('http://localhost:3000/api/product', {
-      params: {
-        q: search.value,
-        category: cat.value? cat.value:null,
-        price_min: price.value.min,
-        price_max: price.value.max,
-        brand: brand.value? brand.value:null,
-        sort: sortBy.value,
+import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
+import '../css/price-slider.scss';
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: 'ZPKzDdH53v0dWMC5p5k5ypqhv4Y3pQSPi1prLBt5cyEuNuKT',
+    nodes: [
+      {
+        host: 'localhost',
+        port: '8108',
+        protocol: 'http',
       },
-    })
-    .then((response) => {
-      console.log(response.data);
-      data.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-getAllProduct();
-watch(search, getAllProduct);
-watch(sortBy, getAllProduct);
-watch(price, getAllProduct);
-watch(cat, getAllProduct);
-watch(brand, getAllProduct);
+    ],
+  },
+  additionalSearchParameters: {
+    query_by: 'name,description',
+  },
+});
+const searchClient = typesenseInstantsearchAdapter.searchClient;
 </script>
+<style lang="scss">
+.ais-HierarchicalMenu-list--child {
+  margin-left: 24px;
+}
+</style>

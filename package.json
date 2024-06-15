@@ -19,10 +19,13 @@
     "pinia": "^2.0.11",
     "postcss-rtlcss": "^5.3.0",
     "quasar": "^2.16.0",
+    "typesense-instantsearch-adapter": "^2.8.0",
     "vee-validate": "^4.13.1",
     "vue": "^3.4.18",
     "vue-i18n": "^9.2.2",
+    "vue-instantsearch": "^4.17.3",
     "vue-router": "^4.0.12",
+    "vue-slider-component": "^3.2.24",
     "yup": "^1.4.0"
   },
   "devDependencies": {
